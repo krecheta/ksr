@@ -1,22 +1,22 @@
 package knn;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dataset.Article;
 import dataset.Parser;
+import dataset.Preprocessor;
 
 public class Main {
 
 	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis();
+		
 		Parser p = new Parser("D:\\workspace\\ksr-zad1\\reuters_data");
 		List<Article> art = null;
 		
-		try {
-			art = p.getArticles();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		art = p.getArticles();
 		
 		System.out.println("WSZYSTKICH: " + art.size());
 		System.out.print("USA: ");
@@ -31,6 +31,14 @@ public class Main {
 		System.out.println(art.stream().filter(x -> x.getPlace().equals("canada")).count());
 		System.out.print("JAPAN: ");
 		System.out.println(art.stream().filter(x -> x.getPlace().equals("japan")).count());
+		
+		Preprocessor pr = new Preprocessor();
+		
+		pr.processData(art);
+		
+		long stopTime = System.currentTimeMillis();
+		
+		System.out.println("\nCZAS: " + (stopTime - startTime));
 		
 //		for(int i=0; i<50; i++) {
 //			System.out.println("PLACE: " + art.get(i).getPlace());

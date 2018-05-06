@@ -1,9 +1,16 @@
 package dataset;
 
+import java.util.List;
+
+/**
+ * Represents single article.
+ *
+ */
 public class Article {
 	
 	private String place;
 	private String text;
+	private List<String> words;
 	
 	public String getPlace() {
 		return place;
@@ -18,6 +25,14 @@ public class Article {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public List<String> getWords() {
+		return words;
+	}
+
+	public void setWords(List<String> words) {
+		this.words = words;
 	}
 	
 }

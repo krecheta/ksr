@@ -1,6 +1,7 @@
 package dataset;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +10,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class responsible for reading data from files.
+ *
+ */
 public class Parser {
 	
 	/**
@@ -18,7 +23,7 @@ public class Parser {
 	
 	/**
 	 * Class constructor specifying directory with data.
-	 * It fills files list with files with ".sgm" extension.
+	 * Fills files list with files with ".sgm" extension.
 	 * @param directory directory with data files
 	 */
 	public Parser(String directory) {
@@ -31,11 +36,11 @@ public class Parser {
 	}
 	
 	/**
-	 * Returns all Articles from files in specified directory.
+	 * Returns list of all Articles from files in specified directory.
 	 * @return list of articles
 	 * @throws IOException
 	 */
-	public List<Article> getArticles() throws IOException{
+	public List<Article> getArticles() {
 		List<Article> articles = new ArrayList<>();
 		
 		for(String fileName : files) {
@@ -51,11 +56,19 @@ public class Parser {
 	 * @return string with content of file
 	 * @throws IOException
 	 */
-	private String readFile(String fileName) throws IOException {
+	private String readFile(String fileName) {
 		StringBuilder sb = new StringBuilder();
 		
 		try(BufferedReader r = new BufferedReader(new FileReader(fileName))){
 			r.lines().forEach(sb::append);
+		} catch (FileNotFoundException e) {
+			System.err.println("Nie znaleziono pliku: " + fileName);
+			e.printStackTrace();
+			System.exit(1);
+		} catch (IOException e) {
+			System.err.println("B³¹d wczytywania danych z pliku");
+			e.printStackTrace();
+			System.exit(1);
 		}
 		
 		return sb.toString();

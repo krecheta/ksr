@@ -60,7 +60,8 @@ public class Parser {
 		StringBuilder sb = new StringBuilder();
 		
 		try(BufferedReader r = new BufferedReader(new FileReader(fileName))){
-			r.lines().forEach(sb::append);
+			r.lines().forEach( x -> sb.append(x).append(" ") );
+			//r.lines().map(x -> sb.append(x).append(" "));
 		} catch (FileNotFoundException e) {
 			System.err.println("Nie znaleziono pliku: " + fileName);
 			e.printStackTrace();

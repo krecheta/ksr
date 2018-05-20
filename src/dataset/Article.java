@@ -1,5 +1,7 @@
 package dataset;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -11,6 +13,7 @@ public class Article {
 	private String place;
 	private String text;
 	private List<String> words;
+	private HashMap<Integer, Double> vector;
 	
 	public String getPlace() {
 		return place;
@@ -33,6 +36,14 @@ public class Article {
 
 	public void setWords(List<String> words) {
 		this.words = words;
+	}
+
+	public HashMap<Integer, Double> getVector() {
+		return vector;
+	}
+
+	public void setVector(HashMap<Integer, Double> vector) {
+		this.vector = vector;
 	}
 	
 }

@@ -10,17 +10,17 @@ import java.util.List;
  */
 public class Article {
 	
-	private String place;
+	private String label;
 	private String text;
 	private List<String> words;
 	private HashMap<Integer, Double> vector;
 	
-	public String getPlace() {
-		return place;
+	public String getLabel() {
+		return label;
 	}
 	
-	public void setPlace(String place) {
-		this.place = place;
+	public void setLabel(String place) {
+		this.label = place;
 	}
 	
 	public String getText() {

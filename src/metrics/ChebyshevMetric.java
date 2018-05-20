@@ -20,9 +20,10 @@ public class ChebyshevMetric implements Metric {
 			
 			if(y.keySet().contains(key)) {
 				distances.add(value - y.get(key));
-				y.remove(key);
 			} else {
-				distances.add(value);
+				if(!x.containsKey(entry.getKey())) {
+					distances.add(value);
+				}
 			}
 		}
 		

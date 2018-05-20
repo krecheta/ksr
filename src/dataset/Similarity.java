@@ -10,36 +10,18 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class Similarity {
-	
-	List<String> keyWords;
-	
-	public void createBagOfWords(List<Article> trainingSet) {
-		
-		List<String> allWords = new ArrayList<>();
-		trainingSet.forEach( x -> allWords.addAll(x.getWords()) );
-		
-		keyWords = allWords.stream()
-						   .distinct()
-						   .collect(Collectors.toList());
-		
-//		System.out.println(keyWords.size());
-
-		
-//		Map<String, Long> counts = allWords.stream()
-//									  	   .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-//		
-//		Map<String, Long> sortedMap = 
-//			     counts.entrySet().stream()
-//							      .sorted(Entry.comparingByValue())
-//							      .collect(Collectors.toMap(Entry::getKey, Entry::getValue,
-//							                              (e1, e2) -> e1, LinkedHashMap::new));
-//				
-//		sortedMap.forEach((k,v) -> System.out.println(k + " " + v));
-		
-	}
 
 	public void binaryFunction(List<Article> articles) {
 		HashMap<Integer, Double> vector;
+		List<String> trainingWords = new ArrayList<>();
+		
+		for(int i = 0; i < articles.size()*0.6; i++) {
+			trainingWords.addAll(articles.get(i).getWords());
+		}
+		
+		List<String> keyWords = trainingWords.stream()
+											 .distinct()
+											 .collect(Collectors.toList());
 		
 		for(Article art : articles) {
 			vector = new HashMap<Integer, Double>();
@@ -51,10 +33,47 @@ public class Similarity {
 			}
 			art.setVector(vector);
 		}
+
 	}
 	
-	public void tfidf(List<Article> articles) {
-		HashMap<Integer, Double> vector;
+	public void TFxIDF(List<Article> articles) {
 		
+		HashMap<Integer, Double> vector;
+		List<String> allWords = new ArrayList<>();
+		List<String> allWordsDistinct;
+		double tf, idf, tfidf;
+		
+		articles.forEach( x -> allWords.addAll(x.getWords()));
+		allWordsDistinct = allWords.stream()
+								   .distinct()
+								   .collect(Collectors.toList());
+
+		//count 
+		Map<String, Long> allWordsCounts = allWords.stream()
+										   		   .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+		for(Article art : articles) {
+			vector = new HashMap<>();
+			
+			//count occurrences of each word in article
+			Map<String, Long> artWordCounts = art.getWords().stream()
+													 		.collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+			
+			for(String word : art.getWords()) {
+				//calculate tf
+				tf = artWordCounts.get(word) / (double) art.getWords().size();
+				
+				//calculate idf
+				idf = Math.log(articles.size() / (double) allWordsCounts.get(word));
+				
+				tfidf = tf*idf;
+				if(tfidf != 0) {
+					int index = allWordsDistinct.indexOf(word);
+					if(index != -1) {
+						vector.put(index, tf*idf);
+					}
+				}	
+			}
+			art.setVector(vector);
+		}
 	}
 }

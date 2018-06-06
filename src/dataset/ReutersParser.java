@@ -22,6 +22,7 @@ public class ReutersParser {
 	private List<String> files = new ArrayList<>();
 	
 	private final String LABEL;
+	
 	/**
 	 * Class constructor specifying directory with data.
 	 * Fills files list with files with ".sgm" extension.
@@ -121,7 +122,7 @@ public class ReutersParser {
 	}
 	/**
 	 * Returns null if specified string isn't allowed topic
-	 * (earn, acq, crude, trade, money-fx or interest).
+	 * (earn, crude, money-fx, sugar or money-supply).
 	 * Otherwise returns this topic wothout <D> marks.
 	 * @param topics string with topics
 	 * @return
@@ -129,7 +130,7 @@ public class ReutersParser {
 	private String parseTopics(String topics) {
 
 		List<String> possibleTopics = Arrays.asList(
-				"earn", "crude", "trade", "money-fx", "sugar", "ship", "money-supply");
+				"earn", "crude", "money-fx", "sugar", "money-supply");
 		
 		String topic = topics.replaceAll("<D>|</D>","");
 		if(possibleTopics.contains(topic)) {

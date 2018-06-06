@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 
 import metrics.Metric;
 
+/**
+ * Class responsible for data clasiffication using k-NN algorithm.
+ *
+ */
 public class Classifier {
 	private final Metric metric;
 	private final int kParam;
@@ -23,12 +27,12 @@ public class Classifier {
 		this.kParam = kParam;
 		this.trainingSet = trainingSet;
 		this.testSet = testSet;
-		
-		
 	}
 	
+	/**
+	 * Classify testSet using k-NN algorithm.
+	 */
 	public void classify() {
-		
 		Map<ClassSubject, Double> distances;
 		List<String> nearestLabels;
 		Map<String, Integer> labelsCount;
@@ -64,15 +68,17 @@ public class Classifier {
 			//get most popular label
 			Entry<String, Integer> mostOccLabel = Collections.max(labelsCount.entrySet(), Map.Entry.comparingByValue());
 			long counter = labelsCount.values().stream()
-										  .filter( x -> x.equals(mostOccLabel.getValue()))
-										  .count();
+										  	   .filter( x -> x.equals(mostOccLabel.getValue()))
+										       .count();
 			
 			//if counter > 1 - there are two or more nearest labels -> set the nearest label
 			if(counter > 1) {				
-				List<String> labelsToRemove = labelsCount.entrySet().stream()
-																	.filter(x -> !x.getValue().equals(mostOccLabel.getValue()))
-																	.map(x -> x.getKey())
-																	.collect(Collectors.toList());
+				List<String> labelsToRemove = 
+						labelsCount.entrySet().stream()
+											  .filter(x -> !x.getValue().equals(mostOccLabel.getValue()))
+											  .map(x -> x.getKey())
+											  .collect(Collectors.toList());
+				
 				nearestLabels.removeAll(labelsToRemove);
 				predictedLabel = nearestLabels.get(0);
 				
@@ -83,6 +89,10 @@ public class Classifier {
 			testObject.setPredictedLabel(predictedLabel);
 		}
 	}
+	
+	/**
+	 * Print results of clasiffication.
+	 */
 	public void printResults() {
 
 		HashMap<String, Integer> correctlyClassified = new HashMap<>();
@@ -117,7 +127,7 @@ public class Classifier {
 			System.out.print(" %)");
 		}
 
-		System.out.print("\nTOTAL:: " + counter + "/" + testSet.size() + " (");
+		System.out.print("\ntotal:: " + counter + "/" + testSet.size() + " (");
 		System.out.printf("%.2f", (counter/(double)testSet.size()) * 100);
 		System.out.print(" %)");
 	}

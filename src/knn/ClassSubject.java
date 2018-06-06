@@ -2,6 +2,10 @@ package knn;
 
 import java.util.HashMap;
 
+/**
+ * Represents classification subject.
+ *
+ */
 public class ClassSubject {
 	private HashMap <Integer, Double> vector;
 	private String label;
@@ -16,9 +20,6 @@ public class ClassSubject {
 		return vector;
 	}
 	public void setVector(HashMap<Integer, Double> vector) {
-		if(vector.size() == 0) {
-			System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		}
 		this.vector = vector;
 	}
 	public String getLabel() {

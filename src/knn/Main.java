@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,7 +18,7 @@ import dataset.Article;
 import dataset.ReutersParser;
 import dataset.Preprocessor;
 import dataset.DataReader;
-import dataset.Similarity;
+import dataset.Vectorizer;
 import metrics.ChebyshevMetric;
 import metrics.EuclideanMetric;
 import metrics.ManhattanMetric;
@@ -28,13 +29,37 @@ public class Main {
 	public static void main(String[] args) {
 		
 		long startTime = System.currentTimeMillis();
-		int kParam = 5;
-		char metricParam = 'E';
-		//String dataPath = "D:\\workspace\\ksr-zad1\\reuters_data";
-		String dataPath = "data_banknote.txt";
+		
+		int kParam = Integer.parseInt(args[0]);
+		char metricParam = args[1].charAt(0);
+		String dataPath = args[2];
 		char classificationParam = ' ';
-		String labelParam = "PLACES";
-		String similarityParam = "binary";
+		String stopWordsPath = null;
+		String labelParam = null;
+		String similarityParam = null;
+		boolean cutVectors = false;
+		
+		if(args.length > 3) {
+			classificationParam = 't';
+			stopWordsPath = args[3];
+			labelParam = args[4];
+			similarityParam = args[5];
+			if(args[6].equals("1")){
+				cutVectors = true;
+			} else {
+				cutVectors = false;
+			}	
+		}
+
+//		int kParam = 3;
+//		char metricParam = 'E';
+//		String dataPath = "D:\\workspace\\ksr-zad1\\reuters_data";
+//		//String dataPath = "data_banknote.txt";
+//		char classificationParam = 't';
+//		String labelParam = "PLACES";
+//		String similarityParam = "binary";
+//		String stopWordsPath = "stopwords.txt";
+//		boolean cutVectors = false;
 		
 		List<ClassSubject> trainingSet = new ArrayList<>();
 		List<ClassSubject> testSet = new ArrayList<>();
@@ -44,15 +69,15 @@ public class Main {
 			List<Article> articles = p.getArticles();
 			
 			System.out.println("---- Data pre-processing ----");
-			Preprocessor pr = new Preprocessor();
+			Preprocessor pr = new Preprocessor(stopWordsPath);
 			pr.processData(articles);
 			
-			Similarity s = new Similarity();
+			Vectorizer s = new Vectorizer();
 			
 			if(similarityParam.equals("binary")) {
-				s.binaryFunction(articles);
+				s.binaryWeighting(articles, cutVectors);
 			} else if(similarityParam.equals("tf-idf")){
-				s.TFxIDF(articles);
+				s.TFxIDF(articles, cutVectors);
 			}
 			
 			int index = (int) (articles.size()*0.6);
@@ -91,7 +116,7 @@ public class Main {
 		Metric metric = null;
 		if(metricParam == 'E') {
 			metric = new EuclideanMetric();
-		} else if(metricParam == 'M') {
+		} else if(metricParam == 'U') {
 			metric = new ManhattanMetric();
 		} else if(metricParam == 'C') {
 			metric = new ChebyshevMetric();
@@ -104,6 +129,6 @@ public class Main {
 		knn.printResults();
 		
 		long stopTime = System.currentTimeMillis();
-		System.out.println("\nCZAS: " + (stopTime - startTime));
+		System.out.println("\nTIME: " + ((stopTime - startTime)/1000) + " s");
 	}
 }

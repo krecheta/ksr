@@ -10,12 +10,29 @@ import java.util.List;
 
 import knn.ClassSubject;
 
+/**
+ * Class responsible for reading banknote 
+ * autenthication dataset from specified file.
+ *
+ */
 public class DataReader {
+	/**
+	 * Path to file with data.
+	 */
 	private final String PATH;
+	
+	/**
+	 * Class constructor specifying path to file with data.
+	 * @param path
+	 */
 	public DataReader(String path) {
 		this.PATH = path;
 	}
 	
+	/**
+	 * Reads data from file into list of ClassSubject.
+	 * @return list of ClassSubject
+	 */
 	public List<ClassSubject> getData(){
 		List<ClassSubject> list = new ArrayList<>();
 		

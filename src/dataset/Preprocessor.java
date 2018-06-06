@@ -9,16 +9,19 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Class responsible for data processing.
+ * Class responsible for data pre-processing.
  *
  */
 public class Preprocessor {
 	
+	/**
+	 * List of english stop words.
+	 */
 	private List<String> stopWords;
 	
-	public Preprocessor() {
+	public Preprocessor(String stopWordsPath) {
 		stopWords = new ArrayList<>();
-		readStopWords();
+		readStopWords(stopWordsPath);
 	}
 	
 	/**
@@ -30,6 +33,7 @@ public class Preprocessor {
 	 * 3. Remove all words with single character
 	 * 4. Remove extra spaces
 	 * 5. Remove all words from the stop words list
+	 * 6. Words stemming
 	 * @param articles list of articles
 	 */
 	public void processData(List<Article> articles) {		
@@ -68,9 +72,9 @@ public class Preprocessor {
 	/**
 	 * Reads file with english stop words to the list of strings.
 	 */
-	private void readStopWords() {
+	private void readStopWords(String stopWordsPath) {
 		
-		try(BufferedReader r = new BufferedReader(new FileReader("stopwords.txt"))){
+		try(BufferedReader r = new BufferedReader(new FileReader(stopWordsPath))){
 			r.lines().forEach(stopWords::add);
 		} catch (IOException e) {
 			System.err.println("B³¹d wczytywania stop listy s³ów");

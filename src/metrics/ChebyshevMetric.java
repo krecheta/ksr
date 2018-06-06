@@ -10,7 +10,8 @@ public class ChebyshevMetric implements Metric {
 
 	@Override
 	public double calculateDistance(HashMap<Integer, Double> x, HashMap<Integer, Double> y) {
-		List<Double> distances = new ArrayList<>();
+		//List<Double> distances = new ArrayList<>();
+		double val = 0, tmp = 0;
 		int key;
 		double value;
 		
@@ -19,21 +20,27 @@ public class ChebyshevMetric implements Metric {
 			value = entry.getValue();
 			
 			if(y.keySet().contains(key)) {
-				distances.add(value - y.get(key));
+				tmp = Math.abs(value - y.get(key));
 			} else {
 				if(!x.containsKey(entry.getKey())) {
-					distances.add(value);
+					tmp = Math.abs(value);
 				}
+			}
+			if(tmp > val) {
+				val = tmp;
 			}
 		}
 		
 		for(Map.Entry<Integer, Double> entry : y.entrySet()) {
 			if(!x.containsKey(entry.getKey())) {
-				distances.add(entry.getValue());
+				tmp = Math.abs(entry.getValue());
+			}
+			if(tmp > val) {
+				val = tmp;
 			}
 		}
 		
-		return Math.abs(Collections.max(distances));
+		return val;
 	}
 
 }
